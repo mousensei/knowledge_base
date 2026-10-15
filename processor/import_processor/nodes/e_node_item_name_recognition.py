@@ -81,3 +81,6 @@ class NodeItemNameRecognition(BaseNode):
 
 if __name__ == "__main__":
     node = NodeItemNameRecognition()
+    init_state = {
+
+    }
