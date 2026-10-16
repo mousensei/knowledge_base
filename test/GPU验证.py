@@ -15,12 +15,12 @@ if torch.cuda.is_available():
         print(f'计算能力：{torch.cuda.get_device_capability(i)}')
 
         # 获取显存信息（单位：GB）
-        total_memory = torch.cuda.get_device_properties(i).total_memory / (1024**3)
+        total_memory = torch.cuda.get_device_properties(i).total_memory / (1024 ** 3)
         print(f'总显存：{total_memory:.2f} GB')
 
         # 当前显存使用情况
-        allocated = torch.cuda.memory_allocated(i) / (1024**3)
-        reserved = torch.cuda.memory_reserved(i) / (1024**3)
+        allocated = torch.cuda.memory_allocated(i) / (1024 ** 3)
+        reserved = torch.cuda.memory_reserved(i) / (1024 ** 3)
         print(f'已分配显存：{allocated:.2f} GB')
         print(f'已预留显存：{reserved:.2f} GB')
 
