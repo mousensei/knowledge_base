@@ -21,5 +21,18 @@ dependencies = [
     "python-dotenv>=1.2.4",
     "requests>=2.34.2",
     "sympy>=1.14.0",
+    "torch>=2.14.1",
+    "torchaudio>=2.11.0",
+    "torchvision>=0.29.1",
     "uvicorn>=0.54.0",
 ]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu130" }
+torchvision = { index = "pytorch-cu130" }
+torchaudio = { index = "pytorch-cu130" }
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
