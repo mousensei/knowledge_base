@@ -34,16 +34,16 @@ class NodeMDImg(BaseNode):
         target_images = self._step_2_scan_images(md_content, images_dir)
         # print(target_images)
 
-        # 3 模型理解，生成图片摘要
+        # 3 模型理解,生成图片摘要
         summaries = self._step_3_generate_summaries(md_path_obj.stem, target_images)  # dict[str,str]
         # print(summaries)
 
-        # 4 上传minio，上传图片,替换md内容
+        # 4 上传minio,上传图片,替换md内容
         new_md_content = self._step_4_upload_and_replace(md_path_obj.stem, target_images, summaries, md_content)
         # print("==========================替换结果=========================")
         # print(new_md_content)
 
-        # 5 备份，更新state
+        # 5 备份,更新state
         new_md_file_name = self._step_5_backup_new_md_file(state["md_path"], new_md_content)
 
         state["md_path"] = new_md_file_name

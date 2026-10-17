@@ -38,14 +38,14 @@ class NodeItemNameRecognition(BaseNode):
         # 步骤4：回填商品名称到状态和切片
         self._step_4_update_chunks(state, chunks, item_name)
         chunks = state.get("chunks")
-        path = Path(state.get("md_path")).parent / f'{state.get("file_title")}_new_chunks.json'
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(
-                chunks,
-                f,
-                ensure_ascii=False,
-                indent=2,
-            )
+        # path = Path(state.get("md_path")).parent / f'{state.get("file_title")}_new_chunks.json'
+        # with open(path, "w", encoding="utf-8") as f:
+        #     json.dump(
+        #         chunks,
+        #         f,
+        #         ensure_ascii=False,
+        #         indent=2,
+        #     )
 
         # 步骤5：为商品名称生成稠密/稀疏向量
         dense_vector, sparse_vector = self._step_5_generate_vectors(item_name)
