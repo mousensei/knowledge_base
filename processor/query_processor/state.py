@@ -1,5 +1,6 @@
 from typing import TypedDict, List
 
+
 class QueryGraphState(TypedDict):
     """
     查询流程图状态
