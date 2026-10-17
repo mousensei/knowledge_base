@@ -8,8 +8,9 @@ from typing import TypeVar
 from tool.logger import logger
 
 T = TypeVar("T")  # 泛型状态类型
-class NodeBase(ABC):
 
+
+class NodeBase(ABC):
     name: str = "base_node"  # 节点名称，子类应覆盖
 
     def __call__(self, state: T) -> T:
