@@ -1,4 +1,4 @@
-from urllib import response
+from typing import Literal
 
 from langgraph.constants import START, END
 from langgraph.graph import StateGraph
@@ -19,7 +19,7 @@ class KBImportWorkflow:
 
     def run(self, state: ImportGraphState, stream: bool = False):
         """运行图"""
-        print(f"运行图...是否流式输出：{stream}...")
+        print(f"运行图...是否流式输出:{stream}...")
         if stream:
             return self.graph.stream(state, stream_mode="values")
         else:
@@ -27,14 +27,15 @@ class KBImportWorkflow:
 
     @property
     def graph(self):
-        """ """
+        """  """
         print("计算属性graph...")
         if self._compiled_graph is None:
             self._compiled_graph = self.build_graph()
+
         return self._compiled_graph
 
     @staticmethod
-    def route_after_entry(state: ImportGraphState):
+    def route_after_entry(state: ImportGraphState):  # ->Literal["b_node_pdf_to_md","c_node_md_img",END]
         print("入口节点的路由...")
         """路由：去b或者c或者END"""
         if state.get("is_md_read_enabled"):
@@ -58,6 +59,7 @@ class KBImportWorkflow:
         graph.add_node("g_node_import_milvus", NodeImportMilvus())
 
         # 设置边
+        # graph.add_edge(START,"a_node_entry")
         graph.set_entry_point("a_node_entry")
         graph.add_conditional_edges("a_node_entry",
                                     self.route_after_entry,
@@ -78,12 +80,11 @@ if __name__ == "__main__":
     import_state = {"import_file_path": "D:\hak180产品安全手册.pdf"}
     import_graph = KBImportWorkflow()
 
-    # # 流式输出
-    # import_graph.run(import_state, stream=True)
-    # print(response)
-    # for item in response:
-    #     print(f"结果是：{item}")
+    # 流式输出
+    response = import_graph.run(import_state, stream=True)
+    for item in response:
+        print(f'结果是：{item.get("file_title")}导入完成')
 
     # 非流式输出
-    response = import_graph.run(import_state, stream=False)
-    print(response)
+    # response = import_graph.run(import_state, stream=False)
+    # print(response)

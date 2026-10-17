@@ -35,7 +35,7 @@ class NodePDFToMD(BaseNode):
             md_content = f.read()
 
         # 5 更新state全局状态
-        state["md_content"] = None
+        state["md_content"] = md_content
         state["md_path"] = md_path
         return state
 
@@ -151,7 +151,7 @@ class NodePDFToMD(BaseNode):
         # 4 重命名
         target_md_file = extract_target_dir / "full.md"
         new_md_path = target_md_file.with_name(f"{pdf_stem}.md")
-        target_md_file.rename(new_md_path)
+        target_md_file.replace(new_md_path)
         self.logger.info(f"【MD重命名】重命名成功，文件名：{pdf_stem}.md")
 
         return str(new_md_path.absolute())

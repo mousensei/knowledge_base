@@ -17,7 +17,7 @@ class NodeEntry(BaseNode):
         import_file_path = state.get("import_file_path")
 
         if not import_file_path:
-            raise StateFieldError(message=f"文件不存在：{import_file_path}")
+            raise StateFieldError(message=f"文件参数不存在：{import_file_path}")
 
         import_file_path_obj = Path(import_file_path)
         if not import_file_path_obj.exists():
@@ -29,9 +29,16 @@ class NodeEntry(BaseNode):
         elif import_file_path_obj.suffix == ".md":
             state["is_md_read_enabled"] = True
             state["md_path"] = import_file_path
+            # 读取md更新state["md_content"] = ?
         else:
             raise ValidationError(message=f"该文件的后缀格式{import_file_path_obj.suffix}不支持")
 
-        state["file_title"] = import_file_path_obj.name
-        state["file_dir"] = r"D:\\output"  # 到出目录：测试节点产出物
+        state["file_title"] = import_file_path_obj.stem
+        state["file_dir"] = r"D:\\output" # 到出目录：测试节点产出物
         return state
+
+if __name__ == "__main__":
+    url = "D:\qwe.pdf"
+    path = Path(url)
+    print(path.name)
+    print(path.stem)
