@@ -198,6 +198,8 @@ class NodeItemNameConfirm(NodeBase):
 
     def _step_7_check_confirmation(self, state: QueryGraphState, align_result: Dict, history: List[Dict]):
         print("处理answer或者item_names")
+        print(align_result)
+        print(history)
 
 
 if __name__ == "__main__":
