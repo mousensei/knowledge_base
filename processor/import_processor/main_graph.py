@@ -77,7 +77,7 @@ class KBImportWorkflow:
 
 
 if __name__ == "__main__":
-    import_state = {"import_file_path": "D:\hak180产品安全手册.pdf"}
+    import_state = {"import_file_path": "D:\Aolynk CB304n Cable网桥 用户手册-5W100-整本手册.pdf"}
     import_graph = KBImportWorkflow()
 
     # 流式输出
