@@ -1,16 +1,21 @@
-# System Prompt
-ITEM_NAME_SYSTEM_PROMPT = "你是一个专业的商品名称识别模型，请根据提供的信息，识别商品名称。"
+ITEM_NAME_EXTRACT_SYSTEM_PROMPT = "你是一个专业的客服助手，擅长理解用户意图和提取关键信息。"
 
-# User Prompt Template
-ITEM_NAME_USER_PROMPT_TEMPLATE = """
-请从以下信息中识别出商品名称与型号：
-文件名：{file_title}
+ITEM_NAME_EXTRACT_TEMPLATE = """
+历史会话：
+{history_text}
 
-正文切片（用于辅助识别）：
-{context}
+当前用户问题：
+{query}
 
-要求：
-1. 返回内容为字符串形式，最好是带品牌、型号和名称的完整商品名称。比如：苏伯尓5000W大功率电磁炉；
-2. 返回结果应该只包含商品名称，不要添加任何解释或其他内容；
-3. 如果无法识别商品名称,请返回空字符串。
+请根据历史会话和当前问题，提取用户正在询问的商品名称（item_names）。
+1. 如果用户明确提到了商品名称，请提取出来。可能有一个或多个，但不能重复。
+2. 如果用户使用了代词（如"这个"、"它"），请结合历史会话指代消解，确定商品名称。
+3. 如果无法确定商品名称，item_names 返回空列表。
+4. 请重新改写用户的问题（rewritten_query），使其成为包含商品名称的独立完整问题。
+
+请直接返回JSON格式结果，格式如下：
+{{
+    "item_names": ["商品A", "商品B"],
+    "rewritten_query": "关于商品A和商品B，..."
+}}
 """
