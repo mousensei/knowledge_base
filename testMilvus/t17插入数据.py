@@ -11,7 +11,7 @@ os.environ["UNSTRUCTURED_DISABLE_NOTICE"] = "1"
 
 def get_milvus_client():
     client = MilvusClient(
-        uri="http://192.168.222.99:19530/",
+        uri="http://192.168.10.129:19530/",
         token=""
     )
     return client
@@ -35,7 +35,7 @@ def insert_data(client: MilvusClient, collection_name: str):
 
     # 向量化
     bgem3model = BGEM3FlagModel(
-        model_name_or_path=r"D:/ai_models/modelscope_cache/models/BAAI/bge-m3",
+        model_name_or_path=r"D:/modelhub/models/BAAI--bge-m3",
         return_dense=True,
         return_sparse=True,
     )

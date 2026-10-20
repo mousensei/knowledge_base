@@ -4,7 +4,7 @@ from pymilvus import MilvusClient, DataType
 # 链接client
 def get_milvus_client():
     client = MilvusClient(
-        uri="http://192.168.222.99:19530/",
+        uri="http://192.168.10.129:19530/",
         token=""
     )
     return client

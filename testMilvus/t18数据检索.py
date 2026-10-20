@@ -6,7 +6,7 @@ from pymilvus import MilvusClient, AnnSearchRequest, RRFRanker
 # 客户端
 def get_milvus_client():
     client = MilvusClient(
-        uri="http://192.168.222.99:19530/",
+        uri="http://192.168.10.129:19530/",
         token=""
     )
     return client
@@ -14,7 +14,7 @@ def get_milvus_client():
 
 # bgem3模型
 def get_bge_m3_model():
-    return BGEM3FlagModel(model_name_or_path=r"D:/ai_models/modelscope_cache/models/BAAI/bge-m3",
+    return BGEM3FlagModel(model_name_or_path=r"D:/modelhub/models/BAAI--bge-m3",
                           return_dense=True,
                           return_sparse=True)
 
