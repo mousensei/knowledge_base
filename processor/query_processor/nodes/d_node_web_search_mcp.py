@@ -58,8 +58,8 @@ class NodeWebSearchMcp(NodeBase):
 
         # 发送请求
         result = await search_mcp_tool.call_tool(
-            tool_name="bailian_web_search",
-            arguments={"query": query, "count": 3},
+            tool_name="search_pro",
+            arguments={"query": query},
         )
         await search_mcp_tool.cleanup()
         return result
