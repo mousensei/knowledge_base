@@ -1,4 +1,5 @@
 import json
+from os.path import join
 from typing import Any, Dict, List
 
 from langchain_core.messages import SystemMessage, HumanMessage
@@ -14,7 +15,7 @@ from tool.logger import logger
 from utils.embedding_utils import generate_embeddings
 from utils.llm_utils import get_llm_client
 from utils.milvus_utils import hybrid_search, create_hybrid_search_requests, get_milvus_client
-from utils.mongo_history_utils import get_recent_messages, save_chat_message
+from utils.mongo_history_utils import get_recent_messages, save_chat_message, update_message_item_names
 
 
 class NodeItemNameConfirm(NodeBase):
@@ -40,7 +41,7 @@ class NodeItemNameConfirm(NodeBase):
 
         # 3 获取历史消息
         history = get_recent_messages(session_id)
-        print(history)
+        # print(history)
 
         # 4 llm识别item_names和rewritten_query
         extract_res = self._step_4_extract_info(original_query, history)
@@ -56,12 +57,13 @@ class NodeItemNameConfirm(NodeBase):
 
         # 6 检索结果对齐
         align_result = self._step_6_align_item_names(query_results)
-
+        print(align_result)
         # 7 状态更新:answer有内容，answer没内容
         state = self._step_7_check_confirmation(state, align_result, history)
+        print(state)
 
-        # # 8 写入历史消息
-        # self._step_8_write_history(state, session_id=session_id, rewritten_query=rewritten_query, message_id=message_id)
+        # 8 写入历史消息
+        self._step_8_write_history(state, session_id=session_id, rewritten_query=rewritten_query, message_id=message_id)
 
         return state
 
@@ -108,7 +110,7 @@ class NodeItemNameConfirm(NodeBase):
         if "rewritten_query" not in result:
             result["rewritten_query"] = original_query
         if result["item_names"]:
-            [
+            result["item_names"] = [
                 name.replace(" ", "").replace("\n", "").replace("\t", "").replace("\r", "")
                 for name in result["item_names"]
             ]
@@ -196,16 +198,65 @@ class NodeItemNameConfirm(NodeBase):
             "options": options,
         }
 
+    # 更新state状态，确定输出结果（处理命中和options生成answer）
     def _step_7_check_confirmation(self, state: QueryGraphState, align_result: Dict, history: List[Dict]):
         print("处理answer或者item_names")
-        print(align_result)
-        print(history)
+        confirmed_item_names = align_result.get("confirmed_item_names")
+        options = align_result.get("options")
+
+        # 1 有命中(confirmed)
+        if confirmed_item_names:
+            ids_to_update = []
+            for msg in history:
+                if not msg.get("item_names"):
+                    msgid = msg.get("_id")
+                    if msgid:
+                        ids_to_update.append(msgid)  # 需要更新的会话消息的id列表
+            if ids_to_update:
+                update_message_item_names(ids_to_update, confirmed_item_names)
+            state["item_names"] = confirmed_item_names
+            state["answer"] = ""
+            return state
+
+        # 2 有可能选项(options)
+        if options:
+            state["item_names"] = []
+            options_str = "、".join(options) if options else ""
+            state["answer"] = f"您是要询问关于以下的产品信息吗:{options_str}"
+            return state
+
+        # 3 没有任何命中
+        state["answer"] = "抱歉，未找到相关产品，请提供准确型号以便我为您查询。"
+        state["item_names"] = []
+        return state
+
+    def _step_8_write_history(self, state, session_id: str, rewritten_query: str, message_id: str):
+
+        # 如有answer，插入一条ai消息message
+        if state["answer"]:
+            save_chat_message(
+                session_id=session_id,
+                role="assistant",
+                text=state["answer"],
+                rewritten_query="",
+                item_names=state.get("item_names", [])
+            )
+
+        # 更新用户消息，将新生成的内容更新的用户消息中
+        save_chat_message(
+            session_id=session_id,
+            role="user",
+            text=state["original_query"],
+            rewritten_query=rewritten_query,  # 更新重写后的问题
+            item_names=state.get("item_names", []),
+            message_id=message_id
+        )
 
 
 if __name__ == "__main__":
     # 初始化图状态
     init_state = {
-        "original_query": "那个，兄弟，这个华为擎云B530和网桥玩意怎么才能鼓捣亮了呀？",
+        "original_query": "那个，兄弟，这个网桥玩意怎么才能鼓捣亮了呀？",
         "session_id": "123"  # 前端传递
     }
 
