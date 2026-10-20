@@ -3,7 +3,7 @@ from pymilvus import MilvusClient
 
 def get_milvus_client():
     client = MilvusClient(
-        uri="http://192.168.222.99:19530", token=""
+        uri="http://192.168.10.129:19530", token=""
     )
     return client
 
