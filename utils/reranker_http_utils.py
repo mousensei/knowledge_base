@@ -7,7 +7,7 @@ load_dotenv()
 
 
 def rerank_documents(query: str, documents: list[str]) -> list[float]:
-    text_rerank_api_key = reranker_config.text_rerank_api_key  # 白炼通用key
+    text_rerank_api_key = reranker_config.text_rerank_api_key  # 百炼通用key
     text_rerank_model = reranker_config.text_rerank_model
 
     # 调用排序模型对文档相关度打分
@@ -25,11 +25,14 @@ def rerank_documents(query: str, documents: list[str]) -> list[float]:
         message = response.get("message")
         raise RuntimeError(f"DashScope rerank 调用失败: {message}")
     # 打印查看response的数据结构
-    # print(response)
+
     rerank_scores = [0.0] * len(documents)
     results = response.get("output").get("results")
+    print("=====================重排序模型result======================")
     for result in results:
+        print(result)
         rerank_scores[result.get("index")] = result.get("relevance_score")
+    print("=====================重排序模型result======================")
 
     print(f"rerank_scores:{rerank_scores}")
     return rerank_scores
