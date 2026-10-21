@@ -17,8 +17,10 @@ class LLMConfig:
 
 
 lm_config = LLMConfig(
-    base_url=os.getenv("OPENAI_API_BASE"),
-    api_key=os.getenv("OPENAI_API_KEY"),
+    # base_url=os.getenv("OPENAI_API_BASE"),
+    # api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("DEEPSEEK_API_BASE"),
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
     vl_model=os.getenv("VL_MODEL"),
     llm_model=os.getenv("LLM_DEFAULT_MODEL"),
     item_model=os.getenv("ITEM_MODEL"),
