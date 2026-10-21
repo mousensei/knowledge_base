@@ -6,10 +6,8 @@ from langchain_core.messages import SystemMessage, HumanMessage
 
 from config.milvus_config import milvus_config
 from processor.query_processor.base import NodeBase
-from processor.import_processor.prompt.item_name_recognition import (
-    ITEM_NAME_EXTRACT_TEMPLATE,
-    ITEM_NAME_EXTRACT_SYSTEM_PROMPT,
-)
+from processor.query_processor.prompt.item_name_confirm import ITEM_NAME_EXTRACT_TEMPLATE, \
+    ITEM_NAME_EXTRACT_SYSTEM_PROMPT
 from processor.query_processor.state import QueryGraphState
 from tool.logger import logger
 from utils.embedding_utils import generate_embeddings
@@ -36,12 +34,12 @@ class NodeItemNameConfirm(NodeBase):
         session_id, original_query = self._step_1_validate_params(state)
 
         # 2 保存用户消息
-        message_id = save_chat_message(session_id, "user", original_query)
-        print(f"mongo的数据主键{message_id}")
-
-        # 3 获取历史消息
         history = get_recent_messages(session_id)
         # print(history)
+
+        # 3 获取历史消息
+        message_id = save_chat_message(session_id, "user", original_query)
+        print(f"mongo的数据主键{message_id}")
 
         # 4 llm识别item_names和rewritten_query
         extract_res = self._step_4_extract_info(original_query, history)

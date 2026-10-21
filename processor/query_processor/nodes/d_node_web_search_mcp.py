@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 from agents.mcp import MCPServerStreamableHttp
 
@@ -31,13 +32,26 @@ class NodeWebSearchMcp(NodeBase):
         docs = []  # 解析结果
 
         # 2 调用mcp服务
-        response = asyncio.run(self._mcp_call(query))
-        print(response)
+        result = asyncio.run(self._mcp_call(query))
+        # print(result)
 
         # 3 结果解析
-
+        json_text_str = result.content[0].text
+        result_json_obj = json.loads(json_text_str)
+        pages = result_json_obj.get("pages")
+        for page in pages:
+            snippet = (page.get("snippet") or "").strip()
+            url = (page.get("url") or "").strip()
+            title = (page.get("title") or "").strip()
+            docs.append({
+                "url": url,
+                "title": title,
+                "snippet": snippet,
+            })
+        # print(docs)
         return {"web_search_docs": docs}
 
+    # mcp工具调用
     async def _mcp_call(self, query):
         # mcp服务工具
         search_mcp_tool = MCPServerStreamableHttp(
@@ -66,8 +80,8 @@ class NodeWebSearchMcp(NodeBase):
 
 
 if __name__ == "__main__":
-    nodeWebSearch = NodeWebSearchMcp()
+    nodeWebSearchMcp = NodeWebSearchMcp()
     init_state = {
-        "rewritten_query": "尚硅谷的通关攻略是什么"
+        "rewritten_query": "黑神话悟空通关攻略"
     }
-    response = nodeWebSearch.process(init_state)
+    response = nodeWebSearchMcp(init_state)

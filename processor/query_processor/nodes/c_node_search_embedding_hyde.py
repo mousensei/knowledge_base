@@ -34,7 +34,7 @@ class NodeSearchEmbeddingHyde(NodeBase):
 
         # 2 大模型生成假设文档
         hyde_doc = self._step_2_create_embedding_hyde_doc(rewritten_query)  # 模型扩展结果
-        print(hyde_doc)
+        # print(hyde_doc)
 
         # 3 用"重写问题+假设性文档"搜索chunks
         responses = self._step_3_search_embedding_hyde(
