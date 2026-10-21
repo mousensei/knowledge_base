@@ -14,8 +14,6 @@ class NodeAnswerOutput(NodeBase):
     def process(self, state: QueryGraphState) -> QueryGraphState:
         """
         节点逻辑
-        :param state: 工作流状态对象
-        :return: 更新后的状态对象
         """
 
         # TODO

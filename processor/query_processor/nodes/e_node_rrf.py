@@ -36,12 +36,15 @@ class NodeRrf(NodeBase):
 
         # 3 融合函数
         rrf_merge_results = self._rrf_merge(rrf_inputs)
-        for rrf_merge_result in rrf_merge_results:
-            print(rrf_merge_result)
+        # for rrf_merge_result in rrf_merge_results:
+        #     print(rrf_merge_result)
 
         # 4 提取rrf_chunks（丢弃分数）
+        rrf_chunks = [entity for entity, _ in rrf_merge_results]
 
         # 5 更新返回state
+        state["rrf_chunks"] = rrf_chunks
+        print(state["rrf_chunks"])
         return state
 
     def _rrf_merge(self, rrf_inputs: list[Tuple], k: int = 60, max_results: int = 5):
