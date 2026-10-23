@@ -44,7 +44,7 @@ class NodeRrf(NodeBase):
 
         # 5 更新返回state
         state["rrf_chunks"] = rrf_chunks
-        print(state["rrf_chunks"])
+        # print(state["rrf_chunks"])
         return state
 
     def _rrf_merge(self, rrf_inputs: list[Tuple], k: int = 60, max_results: int = 5):
