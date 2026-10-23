@@ -131,9 +131,9 @@ class NodeAnswerOutput(NodeBase):
                 ("url", "[url={}]"),
                 ("title", "[title={}]"),
             ]:
-                field_value = str(doc.get(field)).strip()
-                if field_value:
-                    meta_tags.append(template.format(field_value))
+                field_value = doc.get(field)
+                if field_value not in (None, ""):
+                    meta_tags.append(template.format(str(field_value).strip()))
 
             relevance_score = doc.get("score")
             if relevance_score is not None:
