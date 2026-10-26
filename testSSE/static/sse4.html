@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <header>
+    <title>sse4</title>
+  </header>
+  <body>
+    <h3>SSE4</h3>
+    <div id="result"></div>
+    <input type="text" value="" id="questionId" placeholder="请输入你的问题" />
+    <button onclick="clickMe()">点我</button>
+    <script>
+      async function clickMe() {
+        resultDom = document.getElementById("result");
+        question = document.getElementById("questionId").value;
+        sessionId = "123";
+        // 短链接：发送问题（post请求）
+        const qusetionResponse = await fetch(`http://localhost:8000/query`, {
+          method: "post",
+          headers: { "Content-Type": "application/json", k: "v" },
+          body: JSON.stringify({ question: question, session_id: sessionId }),
+        });
+
+        if (qusetionResponse.ok) {
+          // 处理短链接请求结果
+          resultData = await qusetionResponse.json();
+          // console.log(resultData)
+          resultDom.innerHTML +=
+            resultData.message + resultData.session_id + "<br>";
+        }
+
+        // 长链接
+        const eventSource = new EventSource(
+          `http://localhost:8000/stream/${sessionId}`,
+        );
+        console.log(eventSource);
+        eventSource.onmessage = function (event) {
+          // alert(1)
+          if (event.data === "[END]") {
+            eventSource.close();
+            return;
+          }
+          resultDom.innerHTML += event.data;
+        };
+      }
+    </script>
+  </body>
+</html>

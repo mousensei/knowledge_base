@@ -1,21 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <header>
-        <title>测试静态资源</title>
-    </header>
-    <body>
-        <h1>测试静态资源</h1>
-        <p id="">访问后端地址：http://127.0.0.1:8001/api/data</p>
-        <pre id="r">原始位置</pre>
-        <button onclick="test()">点击访问后端</button>
-        <script>
-            async function test(){
-                const r = document.getElementById("r");
-                const response = await fetch("http://127.0.0.1:8001/api/data")
-                const jsonData = await response.json()
-                jsonstr = JSON.stringify(jsonData)
-                r.innerText = jsonstr
-            }
-        </script>
-    </body>
+  <header>
+    <title>测试静态资源</title>
+  </header>
+  <body>
+    <h1>测试静态资源</h1>
+    <p id="">访问后端地址：http://127.0.0.1:8001/api/data</p>
+    <pre id="r">原始位置</pre>
+    <button onclick="test()">点击访问后端</button>
+    <script>
+      async function test() {
+        const r = document.getElementById("r");
+        const response = await fetch("http://127.0.0.1:8001/api/data");
+        const jsonData = await response.json();
+        jsonstr = JSON.stringify(jsonData);
+        r.innerText = jsonstr;
+      }
+    </script>
+  </body>
 </html>

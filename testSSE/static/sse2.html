@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <header>
+    <title>sse2</title>
+  </header>
+  <body>
+    <h3>SSE2</h3>
+    <div id="result"></div>
+    <input
+      type="text"
+      value=""
+      id="sessionIdInput"
+      placeholder="请输入sessionId"
+    />
+    <button onclick="a()">点我</button>
+    <script>
+      function a() {
+        resultDom = document.getElementById("result");
+        sessionId = document.getElementById("sessionIdInput").value;
+        eventSource = new EventSource(
+          `http://localhost:8000/stream/${sessionId}`,
+        );
+        eventSource.onmessage = function (event) {
+          if (event.data === "[END]") {
+            eventSource.close();
+            return;
+          }
+          resultDom.innerHTML += event.data + "<br>";
+        };
+      }
+    </script>
+  </body>
+</html>
