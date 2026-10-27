@@ -34,8 +34,9 @@ class NodeEntry(BaseNode):
             raise ValidationError(message=f"该文件的后缀格式{import_file_path_obj.suffix}不支持")
 
         state["file_title"] = import_file_path_obj.stem
-        state["file_dir"] = r"D:\\output" # 到出目录：测试节点产出物
+        # state["file_dir"] = r"D:\\output" # 到出目录：测试节点产出物
         return state
+
 
 if __name__ == "__main__":
     url = "D:\qwe.pdf"

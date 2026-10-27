@@ -6,6 +6,7 @@
 from abc import abstractmethod, ABC
 from typing import TypeVar
 from tool.logger import logger
+from utils.task_utils import add_running_task, add_done_task
 
 T = TypeVar("T")  # 泛型状态类型
 
@@ -21,8 +22,14 @@ class NodeBase(ABC):
             # 1. 开始准备执行节点
             logger.info(f"--- {self.name} 开始啦 ---")
 
+            # 放入前端展示日志任务列表开始
+            add_running_task(state["session_id"], self.name, state["is_stream"])
+
             # 2. 执行节点
             result = self.process(state)
+
+            # 放入前端展示日志任务列表结束
+            add_done_task(state["session_id"], self.name, state["is_stream"])
 
             # 3. 执行节点成功
             logger.info(f"--- {self.name} 完成啦 ---")

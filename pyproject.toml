@@ -7,6 +7,7 @@ dependencies = [
     "dashscope>=1.27.7",
     "fastapi>=0.143.1",
     "flagembedding>=1.4.2",
+    "gradio>=6.30.0",
     "grandalf>=0.8",
     "langchain>=1.4.5",
     "langchain-openai>=1.7.1",
