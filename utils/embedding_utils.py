@@ -18,6 +18,7 @@ def get_bge_m3_ef():
 
     return _bge_m3_ef
 
+
 # 获得向量数据，并且解析出稠密和稀疏的向浮点量值
 def generate_embeddings(texts):
     """
@@ -25,13 +26,20 @@ def generate_embeddings(texts):
     :param texts: 要生成嵌入的文本列表
     :return: 包含dense和sparse向量的字典
     """
+    if not texts:
+        return {
+            "dense": [],
+            "sparse": []
+        }
     model = get_bge_m3_ef()
     embeddings = model.encode_documents(texts)
     processed_sparse = []
     for i in range(len(texts)):
-        sparse_indices = embeddings["sparse"].indices[embeddings["sparse"].indptr[i]:embeddings["sparse"].indptr[i+1]].tolist()
-        sparse_data = embeddings["sparse"].data[embeddings["sparse"].indptr[i]:embeddings["sparse"].indptr[i+1]].tolist()
-        sparse_dict = {k: v for k, v in zip(sparse_indices,sparse_data)}
+        sparse_indices = embeddings["sparse"].indices[
+            embeddings["sparse"].indptr[i]:embeddings["sparse"].indptr[i + 1]].tolist()
+        sparse_data = embeddings["sparse"].data[
+            embeddings["sparse"].indptr[i]:embeddings["sparse"].indptr[i + 1]].tolist()
+        sparse_dict = {k: v for k, v in zip(sparse_indices, sparse_data)}
         processed_sparse.append(sparse_dict)
 
     return {
